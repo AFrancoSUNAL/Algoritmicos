@@ -15,7 +15,7 @@
 
 **UN Mapa** es una aplicación web interactiva creada para facilitar la orientación dentro del campus de la **Universidad Nacional de Colombia, sede Bogotá**. Con una superficie de más de **1.213.500 m²**, el campus puede resultar complejo de recorrer, especialmente para quienes lo visitan por primera vez.
 
-El proyecto tiene como objetivo principal proporcionar una herramienta intuitiva y visual que permita explorar el campus de forma dinámica. Entre sus funcionalidades actuales se incluye la visualización de:
+El proyecto tiene como objetivo principal proporcionar una herramienta intuitiva y visual que permita explorar el campus de forma dinámica. Entre sus funcionalidades se incluye la visualización de:
 
 - **Edificios**, **canchas deportivas**, **zonas comunes** y otros puntos de interés.
 - **Nombres y códigos oficiales** de los edificios.
