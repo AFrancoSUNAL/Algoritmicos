@@ -24,5 +24,8 @@ El proyecto tiene como objetivo principal proporcionar una herramienta intuitiva
 Estas características representan solo una parte de lo que se proyecta para la aplicación. Se plantea su evolución continua, integrando nuevas funciones que mejoren la experiencia del usuario y respondan a las necesidades de la comunidad universitaria.
 
 ---
+## Planificación
 
+Planificación: [https://docs.google.com/spreadsheets/d/1hxZiNijgtNWyXsCKOjw4VM1uXCbIGRjGcWzKozZMmO0/edit?usp=sharing]
+---
 
