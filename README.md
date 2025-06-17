@@ -5,7 +5,7 @@
 ### Contacto e integrantes
 
 - **Andrés Felipe Franco Sepúlveda** – afrancose@unal.edu.co  
-- **Daniel Alejandro Ortiz Veloza** – danortiz@unal.edu.co  
+- **Daniel Alejandro Ortiz Velosa** – danortiz@unal.edu.co  
 - **Jesús Esteban Pérez Rodríguez** – jeperezro@unal.edu.co  
 - **David Fernando Benjumea Mora** – dbenjumeam@unal.edu.co  
 
