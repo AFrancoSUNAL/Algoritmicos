@@ -27,5 +27,4 @@ Estas características representan solo una parte de lo que se proyecta para la 
 ## Planificación
 
 Planificación: [https://docs.google.com/spreadsheets/d/1hxZiNijgtNWyXsCKOjw4VM1uXCbIGRjGcWzKozZMmO0/edit?usp=sharing]
----
 
