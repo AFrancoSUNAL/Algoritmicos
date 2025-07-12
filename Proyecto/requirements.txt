@@ -1,0 +1,3 @@
+pywebview
+mysql-connector-python
+Jinja2
