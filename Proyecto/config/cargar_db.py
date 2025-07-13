@@ -23,9 +23,9 @@ def create_database():
         cursor.execute("CREATE DATABASE un_mapa_db")
         cursor.execute("USE un_mapa_db")
 
-        # Ruta absoluta del archivo esquema.sql (al lado del script)
-        ruta_sql = os.path.join(os.path.dirname(__file__), 'esquema.sql')
-        with open(ruta_sql, 'r', encoding='utf-8') as archivo:
+        # Ejecutar esquema.sql
+        ruta_esquema = os.path.join(os.path.dirname(__file__), 'esquema.sql')
+        with open(ruta_esquema, 'r', encoding='utf-8') as archivo:
             sql_script = archivo.read()
 
         for instruccion in sql_script.split(';'):
@@ -33,8 +33,18 @@ def create_database():
             if instruccion:
                 cursor.execute(instruccion)
 
+        # Ejecutar datos.sql
+        ruta_datos = os.path.join(os.path.dirname(__file__), 'datos.sql')
+        with open(ruta_datos, 'r', encoding='utf-8') as archivo:
+            datos_script = archivo.read()
+
+        for instruccion in datos_script.split(';'):
+            instruccion = instruccion.strip()
+            if instruccion and not instruccion.upper().startswith("USE"):
+                cursor.execute(instruccion)
+
         conexion.commit()
-        print("Base de datos un_mapa_db creada exitosamente.")
+        print("Base de datos un_mapa_db creada y poblada exitosamente.")
         cursor.close()
         conexion.close()
 
@@ -42,6 +52,6 @@ def create_database():
         if err.errno == mysql.connector.errorcode.ER_DB_CREATE_EXISTS:
             print("La base de datos un_mapa_db ya existe.")
         else:
-            print(f"Error al crear la base de datos: {err}")
+            print(f"Error al crear o poblar la base de datos: {err}")
 
 create_database()
