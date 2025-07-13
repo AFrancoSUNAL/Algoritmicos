@@ -10,6 +10,6 @@ set /p db_port=Puerto:
 echo Ingresa tu contrasena de la base de datos
 set /p db_password=Contrasena:
 
-python db/cargar_db.py %db_user% %db_password% %db_port%
+python config/cargar_db.py %db_user% %db_password% %db_port%
 
 pause
