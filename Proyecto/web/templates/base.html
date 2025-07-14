@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <header class="flex justify-between align-items-center w-full p-4 bg-[#474545] text-white">
+        <div>
+            Logo
+        </div>
+        <div class="rounded-full w-10 h-10 bg-white">
+        </div>
+        <a href="#" onclick="window.pywebview.api.cargar_login()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Login</a>
+    </header>
+    <div id="content"> {% block content %} {% endblock %} </div>
+</body>
+</html>
