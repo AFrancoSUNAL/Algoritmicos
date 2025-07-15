@@ -1,6 +1,7 @@
 import mysql.connector
 import sys
 import os
+import json
 
 def create_database():
     try:
@@ -47,6 +48,16 @@ def create_database():
         print("Base de datos un_mapa_db creada y poblada exitosamente.")
         cursor.close()
         conexion.close()
+        
+        with open('config/db_info.json', 'w') as db_info_file:
+            db_info = {
+                "host": "localhost",
+                "user": user,
+                "port": port,
+                "password": password,
+                "database": "un_mapa_db"
+            }
+            db_info_file.write(json.dumps(db_info, indent=4))
 
     except mysql.connector.Error as err:
         if err.errno == mysql.connector.errorcode.ER_DB_CREATE_EXISTS:

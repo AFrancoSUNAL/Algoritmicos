@@ -1,13 +1,16 @@
 import mysql.connector
+import json
 
-connection = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password='12345',
-    database='un_mapa_db'
-);
+def get_connection():
+    with open('config/db_info.json', 'r') as db_info_file:
+        db_info = json.load(db_info_file)
 
-if connection.is_connected():
-    print("Conexión exitosa a la base de datos.")
-    
-connection.close()
+    connection = mysql.connector.connect(
+        host=db_info["host"],
+        user=db_info["user"],
+        password=db_info["password"],
+        database=db_info["database"],
+        port=db_info["port"]
+    );
+
+    return connection
