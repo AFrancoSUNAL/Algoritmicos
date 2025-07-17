@@ -28,8 +28,8 @@ class API:
         destino = get_ubicacion(id_destino)
 
         if origen and destino:
-            coord_origen = origen[3] 
-            coord_destino = destino[3]
+            coord_origen = origen[4] 
+            coord_destino = destino[4]
 
             url = f"https://www.google.com/maps/dir/?api=1&origin={coord_origen}&destination={coord_destino}&travelmode=walking"
             webbrowser.open(url)
