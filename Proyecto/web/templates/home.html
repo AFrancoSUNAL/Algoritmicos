@@ -3,5 +3,50 @@
     <h1>Home</h1>
     <p>Welcome to the home page!</p>
     {{ nombre }}
+
+    <!-- Select de Origen -->
+    <label for="origen">Origen:</label>
+    <select id="origen" class="border border-gray-400 rounded p-1">
+        {% for id, nombre in ubicaciones %}
+            <option value="{{ id }}">{{ nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Select de Destino -->
+    <label for="destino">Destino:</label>
+    <select id="destino" class="border border-gray-400 rounded p-1">
+        {% for id, nombre in ubicaciones %}
+            <option value="{{ id }}">{{ nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Botón para ir a Google Maps -->
+    <button onclick="abrirRuta()" class="bg-[#94B43B] text-black px-4 py-1 rounded">Ir</button>
+
+    <!-- Botón para cargar ubicación -->
     <a href="#" onclick="window.pywebview.api.cargar_ubicacion(1)" class="bg-[#94B43B] text-black w-24 justify-center">Cargar Ubicación</a>
+
+    <!-- Script para manejar la ruta a google maps -->
+    <script>
+    function abrirRuta() {
+        const origen = document.getElementById("origen").value;
+        const destino = document.getElementById("destino").value;
+
+        if (!origen || !destino) {
+            alert("Debes seleccionar tanto el origen como el destino.");
+            return;
+        }
+
+        if (origen === destino) {
+            alert("El origen y el destino no pueden ser iguales.");
+            return;
+        }
+
+        window.pywebview.api.abrir_ruta(parseInt(origen), parseInt(destino)).then(response => {
+            if (response.status !== "ok") {
+                alert("Error al abrir la ruta: " + response.msg);
+            }
+        });
+    }
+    </script>
 {% endblock %}
