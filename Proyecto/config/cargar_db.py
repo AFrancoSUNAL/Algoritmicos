@@ -2,6 +2,9 @@ import mysql.connector
 import sys
 import os
 import json
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
 
 def create_database():
     try:
@@ -48,8 +51,8 @@ def create_database():
         print("Base de datos un_mapa_db creada y poblada exitosamente.")
         cursor.close()
         conexion.close()
-        
-        with open('Proyecto/config/db_info.json', 'w') as db_info_file:
+
+        with open(BASE_DIR / 'config/db_info.json', 'w') as db_info_file:
             db_info = {
                 "host": "localhost",
                 "user": user,

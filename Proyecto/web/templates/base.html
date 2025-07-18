@@ -6,13 +6,30 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
-    <header class="flex justify-between align-items-center w-full p-4 bg-[#474545] text-white">
-        <div>
-            Logo
+    <header class="position relative flex justify-end align-items-center w-full p-4 bg-[#474545] text-white">
+        <div id="logo" class="position absolute top-0 left-2" style="background-image: url('{{ logo_background }}'); background-size: cover; background-position: center;">
+            <img src="{{ logo }}" width="200">
         </div>
-        <div class="rounded-full w-10 h-10 bg-white">
+        {% if rol == 'usuario' %}
+        <div class="w-10 h-10 flex justify-between" style="width: calc(100% - 200px);">
+            <a href="#" onclick="window.pywebview.api.cargar_home()" class="flex items-center"><img src="{{ logo_buho }}" alt=""> Inicio</a>
+            <a href="#" onclick="window.pywebview.api.cargar_solicitudes()" class="flex items-center">Solicitudes</a>
+            <a href="#" onclick="window.pywebview.api.cargar_eventos()" class="flex items-center">Eventos</a>
+            <a href="#" onclick="window.pywebview.api.cargar_login()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Salir</a>
         </div>
-        <a href="#" onclick="window.pywebview.api.cargar_login()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Login</a>
+        {% elif rol == 'admin' %}
+        <div class="w-10 h-10 flex justify-between" style="width: calc(100% - 200px);">
+            <a href="#" onclick="window.pywebview.api.cargar_home()" class="flex items-center"><img src="{{ logo_buho }}" alt=""> Inicio</a>
+            <a href="#" onclick="window.pywebview.api.cargar_solicitudes()" class="flex items-center">Solicitudes</a>
+            <a href="#" onclick="window.pywebview.api.cargar_eventos()" class="flex items-center">Eventos</a>
+            <a href="#" onclick="window.pywebview.api.cargar_login()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Salir</a>
+        </div>
+        {% elif rol == 'invitado' %}
+        <div class="w-10 h-10 flex justify-between" style="width: calc(100% - 200px);">
+            <a href="#" onclick="window.pywebview.api.cargar_home()" class="flex items-center"><img src="{{ logo_buho }}" alt=""> Inicio</a>
+            <a href="#" onclick="window.pywebview.api.cargar_login()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Login</a>
+        </div>
+        {% endif %}
     </header>
     <div id="content"> {% block content %} {% endblock %} </div>
 </body>

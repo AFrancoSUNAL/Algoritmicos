@@ -1,22 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>Document</title>
-</head>
-<body>
-    <a href="#" onclick="window.pywebview.api.cargar_home()">Volver</a>
-    <h1>Login</h1>
-    <form action="/login" method="post">
+{% extends "base.html" %}
+{% block content %}
+<div class="p-2 flex justify-center">
+    <div class="w-64 flex flex-col border border-[#94B43B] rounded p-4 mt-4">
+        <h1 class="text-2xl font-bold text-center mb-4">Ingresar</h1>
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br>
+        <input type="text" id="username" name="username" class="w-full border border-[#94B43B] rounded p-1 mb-2" required>
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <button type="submit">Login</button>
-    </form>
-</body>
-</html>
+        <input type="password" id="password" name="password" class="w-full border border-[#94B43B] rounded p-1 mb-4" required>
+        <button type="submit" class="bg-[#94B43B] text-black px-4 py-1 rounded text-center mb-2">Login</button>
+        <a href="#" onclick="window.pywebview.api.cargar_home()" class="bg-slate-500 text-slate-50 px-4 py-1 rounded text-center">Volver</a>
+    </div>
+</div>
+{% endblock %}

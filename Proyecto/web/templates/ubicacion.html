@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Ubicación</h1>
-    <p>ID: {{ ubicacion[0] }}</p>
-    <p>Nombre: {{ ubicacion[1] }}</p>
-    <p>Descripción: {{ ubicacion[3] }}</p>
+<div class="mt-6 flex flex-col gap-4 p-2">
+    {% if ubicacion %}
+        <h1 class="text-2xl font-bold">{{ ubicacion[1] }}</h1>
+        <p>Codigo: {{ ubicacion[2] }}</p>
+        <p>{{ ubicacion[3] }}</p>
+    {% else %}
+        <h1 class="text-2xl font-bold text-center">Ubicación no encontrada</h1>
+    {% endif %}
+    <a href="#" onclick="window.pywebview.api.cargar_home()" class="bg-[#94B43B] text-black px-4 py-1 rounded w-24 text-center">Volver</a>
+</div>
 {% endblock %}
