@@ -1,6 +1,5 @@
 USE un_mapa_db;
 
--- Poblar tabla TipoUbicacion
 INSERT INTO TipoUbicacion (nombre, descripcion) VALUES
 ('Aula', 'Espacios destinados a clases y actividades académicas'),
 ('Laboratorio', 'Áreas equipadas para prácticas científicas o técnicas'),
@@ -9,7 +8,6 @@ INSERT INTO TipoUbicacion (nombre, descripcion) VALUES
 ('Portería', 'Puntos de control y acceso al campus'),
 ('Cultural', 'Zonas para actividades culturales');
 
--- Poblar tabla EstadoUbicacion
 INSERT INTO EstadoUbicacion (titulo, descripcion) VALUES
 ('Abierto', 'Disponible para el acceso general de la comunidad'),
 ('Cerrado', 'Actualmente no disponible para el acceso'),
@@ -18,7 +16,6 @@ INSERT INTO EstadoUbicacion (titulo, descripcion) VALUES
 ('En Construcción', 'Área en desarrollo, aún no habilitada'),
 ('Bloqueado', 'Acceso restringido por motivos de seguridad u orden público');
 
--- Poblar tabla Ubicacion
 INSERT INTO Ubicacion (nombre, codigo, descripcion, coordenadas, fk_tipo, fk_estado) VALUES
 	("Departamento de Filosofía", "239", "Unidad académica dedicada al estudio, la enseñanza y la investigación en filosofía, donde se abordan temas como lógica, ética, epistemología, historia de la filosofía y pensamiento político.", "4.632460, -74.083322", 1, 1),
 	("Portería CUB Peatonal Calle 26", "26", "Punto de acceso peatonal ubicado sobre la Calle 26, que conecta directamente con el CUB (Centro de Educación Permanente) y zonas académicas del campus.", "4.632496, -74.083948", 5, 1),
@@ -96,3 +93,11 @@ INSERT INTO Ubicacion (nombre, codigo, descripcion, coordenadas, fk_tipo, fk_est
 	("Parque de Húmboldt", "69", "Área natural del campus que rinde homenaje al científico Alexander von Humboldt, utilizada para la contemplación, la biodiversidad y actividades académicas al aire libre.", "4.6374771,-74.0861199", 6, 1),
 	("Canchas de Fútbol - Cerca del I. de Genética", "77", "Espacio deportivo con campo de fútbol ubicado en la zona oriental del campus, cercano al Instituto de Genética, destinado a entrenamientos, torneos universitarios y recreación estudiantil.", "4.643223, -74.084290", 3, 1),
 	("Canchas de Fútbol - Cerca del IPARM", "66", "Campo deportivo ubicado junto al Instituto Pedagógico Arturo Ramírez Montúfar (IPARM), utilizado para actividades físicas, recreación y competencias deportivas universitarias.", "4.640173, -74.083405", 3, 1);
+
+INSERT INTO EstadoSolicitud (titulo, descripcion) VALUES
+('En espera', 'La solicitud está pendiente de revisión'),
+('Aceptada', 'La solicitud ha sido aprobada y el evento fue creado'),
+('Rechazada', 'La solicitud fue denegada por el administrador');
+
+INSERT INTO Usuario (nombre, contrasena, correo, rol)VALUES 
+('usuario_prueba', '12345', 'usuario@unal.edu.co', 'usuario');

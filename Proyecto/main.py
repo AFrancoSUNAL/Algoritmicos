@@ -78,22 +78,89 @@ class API:
         }
         compilar('seleccion_ruta', {'ubicaciones': ubicaciones, **recursos, **info_usuario})
         
+    def crear_solicitud(self, titulo, descripcion, facultad, id_ubicacion, id_usuario):
+        from config.conexion import get_connection
+        connection = get_connection()
+        cursor = connection.cursor()
+
+        cursor.execute("""
+            INSERT INTO Solicitud (titulo, descripcion, facultad, fk_ubicacion, creado_por)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (titulo, descripcion, facultad, id_ubicacion, id_usuario))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return {'status': 'ok'}
+
     def cargar_solicitudes(self):
+        from controllers.solicitud import get_solicitudes_pendientes
+        from controllers.ubicacion import get_todas_ubicaciones
+        solicitudes = get_solicitudes_pendientes()
+        ubicaciones = get_todas_ubicaciones()
         recursos = {
             'logo': cargar_recursos('img', 'escudoUnal.svg'),
             'logo_background': cargar_recursos('img', 'sealBck.png'),
             'logo_buho': cargar_recursos('img', 'logo_buho.svg')
         }
-        compilar('solicitudes', {**recursos, **info_usuario})
+        compilar('solicitudes', {'solicitudes': solicitudes, 'ubicaciones': ubicaciones, **recursos, **info_usuario})
+    
+    def responder_solicitud(self, id_solicitud, aceptada, respuesta, id_admin):
+        from config.conexion import get_connection
+        connection = get_connection()
+        cursor = connection.cursor()
+
+        estado = 2 if aceptada else 3  # 2: aceptada, 3: rechazada
+
+        cursor.execute("""
+            UPDATE Solicitud
+            SET fk_estado = %s, respuesta = %s, gestionado_por = %s
+            WHERE id_solicitud = %s
+        """, (estado, respuesta, id_admin, id_solicitud))
+
+        if aceptada:
+            cursor.execute("""
+                SELECT titulo, descripcion, fk_ubicacion FROM Solicitud WHERE id_solicitud = %s
+            """, (id_solicitud,))
+            s = cursor.fetchone()
+            from datetime import datetime, timedelta
+            ahora = datetime.now()
+            cursor.execute("""
+                INSERT INTO Evento (titulo, descripcion, inicio, fin, fk_ubicacion, fk_solicitud_asociada)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (s[0], s[1], ahora, ahora + timedelta(hours=1), s[2], id_solicitud))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return {'status': 'ok'}
     
     def cargar_eventos(self):
+        from controllers.evento import get_eventos
+        from controllers.ubicacion import get_todas_ubicaciones
+        eventos = get_eventos()
+        ubicaciones = get_todas_ubicaciones()
         recursos = {
             'logo': cargar_recursos('img', 'escudoUnal.svg'),
             'logo_background': cargar_recursos('img', 'sealBck.png'),
             'logo_buho': cargar_recursos('img', 'logo_buho.svg')
         }
-        compilar('eventos', {**recursos, **info_usuario})
+        compilar('eventos', {'eventos': eventos, 'ubicaciones': ubicaciones, **recursos, **info_usuario})
     
+    def crear_evento(self, titulo, descripcion, inicio, fin, id_ubicacion):
+        from config.conexion import get_connection
+        connection = get_connection()
+        cursor = connection.cursor()
+        query = """
+            INSERT INTO Evento (titulo, descripcion, inicio, fin, fk_ubicacion)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        cursor.execute(query, (titulo, descripcion, inicio, fin, id_ubicacion))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return {'status': 'ok'}
+
     def abrir_ruta(self, id_origen, id_destino):
         from controllers.ubicacion import get_ubicacion
         import webbrowser

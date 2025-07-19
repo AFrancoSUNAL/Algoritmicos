@@ -1,4 +1,77 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% endblock content %}
+<h1 class="text-2xl font-bold text-center">Eventos Programados</h1>
+
+{% if eventos %}
+    {% for evento in eventos %}
+        <div class="border p-4 mb-4 rounded shadow bg-white">
+            <h2 class="text-xl font-semibold">{{ evento.titulo }}</h2>
+            <p class="text-gray-700">{{ evento.descripcion }}</p>
+            <p><strong>Inicio:</strong> {{ evento.inicio }}</p>
+            <p><strong>Fin:</strong> {{ evento.fin }}</p>
+            <p><strong>Ubicación:</strong> {{ evento.nombre_ubicacion }}</p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-center text-gray-600">No hay eventos programados actualmente.</p>
+{% endif %}
+
+<hr class="my-6">
+
+<h2 class="text-xl font-semibold mb-2">Crear nuevo evento</h2>
+<form onsubmit="crearEvento(event)" class="bg-gray-100 p-4 rounded shadow-md">
+    <label class="block mb-1">Título:</label>
+    <input type="text" id="titulo" class="border p-2 w-full mb-3 rounded" required>
+
+    <label class="block mb-1">Descripción:</label>
+    <textarea id="descripcion" class="border p-2 w-full mb-3 rounded" required></textarea>
+
+    <label class="block mb-1">Inicio:</label>
+    <input type="datetime-local" id="inicio" class="border p-2 w-full mb-3 rounded" required>
+
+    <label class="block mb-1">Fin:</label>
+    <input type="datetime-local" id="fin" class="border p-2 w-full mb-3 rounded" required>
+
+    <label class="block mb-1">Ubicación:</label>
+    <select id="ubicacion" class="border p-2 w-full mb-4 rounded" required>
+        {% for id, nombre in ubicaciones %}
+            <option value="{{ id }}">{{ nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" class="bg-[#94B43B] text-black px-4 py-2 rounded hover:bg-[#7fa733]">Crear evento</button>
+</form>
+
+<script>
+function crearEvento(e) {
+    e.preventDefault();
+
+    const titulo = document.getElementById("titulo").value.trim();
+    const descripcion = document.getElementById("descripcion").value.trim();
+    const inicio = document.getElementById("inicio").value;
+    const fin = document.getElementById("fin").value;
+    const ubicacion = parseInt(document.getElementById("ubicacion").value);
+
+    if (!titulo || !descripcion || !inicio || !fin || isNaN(ubicacion)) {
+        alert("Todos los campos son obligatorios.");
+        return;
+    }
+
+    if (new Date(inicio) >= new Date(fin)) {
+        alert("La fecha de fin debe ser posterior a la de inicio.");
+        return;
+    }
+
+    window.pywebview.api.crear_evento(titulo, descripcion, inicio, fin, ubicacion).then(response => {
+        if (response.status === "ok") {
+            alert("Evento creado con éxito.");
+            window.pywebview.api.cargar_eventos();  // Recarga la vista con el nuevo evento
+        } else {
+            alert("Error al crear el evento: " + (response.msg || "desconocido."));
+        }
+    });
+}
+</script>
+
+{% endblock %}

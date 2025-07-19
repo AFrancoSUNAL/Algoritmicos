@@ -52,7 +52,7 @@ def create_database():
         cursor.close()
         conexion.close()
 
-        with open(BASE_DIR / 'config/db_info.json', 'w') as db_info_file:
+        with open(BASE_DIR / 'db_info.json', 'w') as db_info_file:
             db_info = {
                 "host": "localhost",
                 "user": user,

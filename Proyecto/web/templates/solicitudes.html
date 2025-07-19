@@ -1,4 +1,101 @@
 {% extends "base.html" %}
 {% block content %}
 
+<h1 class="text-2xl font-bold mb-6 text-center">Solicitudes de Evento</h1>
+
+<!-- Sección: Lista de solicitudes pendientes -->
+<h2 class="text-xl font-semibold mb-4">Pendientes por revisar</h2>
+
+{% if solicitudes %}
+    {% for s in solicitudes %}
+        <div class="border p-4 mb-4 rounded bg-white shadow">
+            <h3 class="text-lg font-bold">{{ s.titulo }}</h3>
+            <p>{{ s.descripcion }}</p>
+            <p><strong>Facultad:</strong> {{ s.facultad }}</p>
+            <p><strong>Ubicación:</strong> {{ s.ubicacion }}</p>
+            <p><strong>Solicitante:</strong> {{ s.solicitante }}</p>
+            <p><strong>Fecha:</strong> {{ s.creado_en }}</p>
+
+            <textarea id="respuesta_{{ s.id_solicitud }}" placeholder="Respuesta del administrador" class="border p-2 w-full mt-2 mb-2 rounded"></textarea>
+
+            <button onclick="responderSolicitud({{ s.id_solicitud }}, true)" class="bg-green-500 text-white px-4 py-1 rounded mr-2">Aceptar</button>
+            <button onclick="responderSolicitud({{ s.id_solicitud }}, false)" class="bg-red-500 text-white px-4 py-1 rounded">Rechazar</button>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-gray-600">No hay solicitudes pendientes.</p>
+{% endif %}
+
+<hr class="my-6">
+
+<!-- Sección: Formulario para solicitar evento -->
+<h2 class="text-xl font-semibold mb-4">Solicitar nuevo evento</h2>
+
+<form onsubmit="enviarSolicitud(event)" class="bg-gray-100 p-4 rounded shadow">
+    <label class="block mb-1">Título del evento:</label>
+    <input type="text" id="titulo" class="border p-2 w-full mb-3 rounded" required>
+
+    <label class="block mb-1">Descripción:</label>
+    <textarea id="descripcion" class="border p-2 w-full mb-3 rounded" required></textarea>
+
+    <label class="block mb-1">Facultad:</label>
+    <input type="text" id="facultad" class="border p-2 w-full mb-3 rounded" required>
+
+    <label class="block mb-1">Ubicación:</label>
+    <select id="ubicacion" class="border p-2 w-full mb-4 rounded" required>
+        {% for id, nombre in ubicaciones %}
+            <option value="{{ id }}">{{ nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" class="bg-[#94B43B] text-black px-4 py-2 rounded hover:bg-[#7fa733]">Enviar solicitud</button>
+</form>
+
+<script>
+function responderSolicitud(id, aceptada) {
+    const textarea = document.getElementById("respuesta_" + id);
+    const respuesta = textarea.value.trim();
+
+    if (!respuesta) {
+        alert("Debes escribir una respuesta antes de enviar.");
+        return;
+    }
+
+    const idAdmin = 1; // Temporalmente fijo
+    window.pywebview.api.responder_solicitud(id, aceptada, respuesta, idAdmin).then(response => {
+        if (response.status === "ok") {
+            alert("Solicitud procesada correctamente.");
+            window.pywebview.api.cargar_solicitudes();
+        } else {
+            alert("Error al procesar la solicitud.");
+        }
+    });
+}
+
+function enviarSolicitud(e) {
+    e.preventDefault();
+
+    const titulo = document.getElementById("titulo").value.trim();
+    const descripcion = document.getElementById("descripcion").value.trim();
+    const facultad = document.getElementById("facultad").value.trim();
+    const ubicacion = parseInt(document.getElementById("ubicacion").value);
+
+    if (!titulo || !descripcion || !facultad || isNaN(ubicacion)) {
+        alert("Todos los campos son obligatorios.");
+        return;
+    }
+
+    const idUsuario = 1;  // Temporalmente fijo
+
+    window.pywebview.api.crear_solicitud(titulo, descripcion, facultad, ubicacion, idUsuario).then(response => {
+        if (response.status === "ok") {
+            alert("Solicitud enviada correctamente.");
+            window.pywebview.api.cargar_solicitudes();  // Recargar la vista
+        } else {
+            alert("Error al enviar la solicitud.");
+        }
+    });
+}
+</script>
+
 {% endblock %}
