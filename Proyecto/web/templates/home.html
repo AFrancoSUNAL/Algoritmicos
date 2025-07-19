@@ -2,7 +2,9 @@
 {% block content %}
 <div class="p-2"> 
     <h1 class="text-2xl font-bold text-center">UN-Mapa</h1>
-    <p class="text-lg mb-4">Bienvenido {{ nombre }}</p>
+    {% if rol != "invitado" %}
+        <p class="text-lg mb-4">Bienvenido {{ nombre }}</p>
+    {% endif %}
 
     <div class="flex flex-col gap-4">
         <div class="">

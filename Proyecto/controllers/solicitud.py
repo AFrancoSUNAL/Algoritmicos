@@ -4,7 +4,7 @@ def get_solicitudes_pendientes():
     connection = get_connection()
     cursor = connection.cursor(dictionary=True)
     query = """
-        SELECT s.id_solicitud, s.titulo, s.descripcion, s.facultad, s.creado_en,
+        SELECT s.id_solicitud, s.titulo, s.descripcion, s.facultad, s.inicio, s.fin, s.creado_en,
                u.nombre AS solicitante,
                ub.nombre AS ubicacion
         FROM Solicitud s

@@ -42,6 +42,8 @@ CREATE TABLE IF NOT EXISTS Solicitud (
     titulo VARCHAR(255) NOT NULL,
     descripcion TEXT NOT NULL,
     facultad VARCHAR(100),
+    inicio TIMESTAMP NOT NULL,
+    fin TIMESTAMP NOT NULL,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     respuesta TEXT,
     fk_estado INT NOT NULL DEFAULT 1,

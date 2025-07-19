@@ -42,51 +42,30 @@ def cargar_recursos(tipo, nombre):
 
 class API:
     def cargar_home(self):
-        recursos = {
-            'logo': cargar_recursos('img', 'escudoUnal.svg'),
-            'logo_background': cargar_recursos('img', 'sealBck.png'),
-            'logo_buho': cargar_recursos('img', 'logo_buho.svg')
-        }
-        compilar('home', {'nombre': 'Andres', 'ubicaciones': ubicaciones, **recursos, **info_usuario})
+        compilar('home', {'nombre': 'Andres', 'ubicaciones': ubicaciones, **recursos_comun, **info_usuario})
 
     def cargar_login(self):
-        recursos = {
-            'logo': cargar_recursos('img', 'escudoUnal.svg'),
-            'logo_background': cargar_recursos('img', 'sealBck.png'),
-            'logo_buho': cargar_recursos('img', 'logo_buho.svg')
-        }
-        compilar('login', {**recursos, **info_usuario})
+        compilar('login', {**recursos_comun, **info_usuario})
     
     def cargar_ubicacion(self, id_ubicacion):
         from controllers.ubicacion import get_ubicacion
         ubicacion = get_ubicacion(id_ubicacion)
-        print(ubicacion)
-        recursos = {
-            'logo': cargar_recursos('img', 'escudoUnal.svg'),
-            'logo_background': cargar_recursos('img', 'sealBck.png'),
-            'logo_buho': cargar_recursos('img', 'logo_buho.svg')
-        }
-        compilar('ubicacion', {'ubicacion': ubicacion, **recursos, **info_usuario})
+        compilar('ubicacion', {'ubicacion': ubicacion, **recursos_comun, **info_usuario})
     
     def cargar_seleccion_ruta(self):
         from controllers.ubicacion import get_todas_ubicaciones
         ubicaciones = get_todas_ubicaciones()
-        recursos = {
-            'logo': cargar_recursos('img', 'escudoUnal.svg'),
-            'logo_background': cargar_recursos('img', 'sealBck.png'),
-            'logo_buho': cargar_recursos('img', 'logo_buho.svg')
-        }
-        compilar('seleccion_ruta', {'ubicaciones': ubicaciones, **recursos, **info_usuario})
+        compilar('seleccion_ruta', {'ubicaciones': ubicaciones, **recursos_comun, **info_usuario})
         
-    def crear_solicitud(self, titulo, descripcion, facultad, id_ubicacion, id_usuario):
+    def crear_solicitud(self, titulo, descripcion, facultad, inicio, fin, id_ubicacion, id_usuario):
         from config.conexion import get_connection
         connection = get_connection()
         cursor = connection.cursor()
 
         cursor.execute("""
-            INSERT INTO Solicitud (titulo, descripcion, facultad, fk_ubicacion, creado_por)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (titulo, descripcion, facultad, id_ubicacion, id_usuario))
+            INSERT INTO Solicitud (titulo, descripcion, facultad, inicio, fin, fk_ubicacion, creado_por)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (titulo, descripcion, facultad, inicio, fin, id_ubicacion, id_usuario))
 
         connection.commit()
         cursor.close()
@@ -98,12 +77,7 @@ class API:
         from controllers.ubicacion import get_todas_ubicaciones
         solicitudes = get_solicitudes_pendientes()
         ubicaciones = get_todas_ubicaciones()
-        recursos = {
-            'logo': cargar_recursos('img', 'escudoUnal.svg'),
-            'logo_background': cargar_recursos('img', 'sealBck.png'),
-            'logo_buho': cargar_recursos('img', 'logo_buho.svg')
-        }
-        compilar('solicitudes', {'solicitudes': solicitudes, 'ubicaciones': ubicaciones, **recursos, **info_usuario})
+        compilar('solicitudes', {'solicitudes': solicitudes, 'ubicaciones': ubicaciones, **recursos_comun, **info_usuario})
     
     def responder_solicitud(self, id_solicitud, aceptada, respuesta, id_admin):
         from config.conexion import get_connection
@@ -111,41 +85,40 @@ class API:
         cursor = connection.cursor()
 
         estado = 2 if aceptada else 3  # 2: aceptada, 3: rechazada
-
+        
         cursor.execute("""
-            UPDATE Solicitud
-            SET fk_estado = %s, respuesta = %s, gestionado_por = %s
-            WHERE id_solicitud = %s
-        """, (estado, respuesta, id_admin, id_solicitud))
-
-        if aceptada:
+            SELECT fk_estado FROM solicitud WHERE id_solicitud = %s               
+        """, (id_solicitud,))
+        s = cursor.fetchone()
+        
+        if s[0] == 1:
             cursor.execute("""
-                SELECT titulo, descripcion, fk_ubicacion FROM Solicitud WHERE id_solicitud = %s
-            """, (id_solicitud,))
-            s = cursor.fetchone()
-            from datetime import datetime, timedelta
-            ahora = datetime.now()
-            cursor.execute("""
-                INSERT INTO Evento (titulo, descripcion, inicio, fin, fk_ubicacion, fk_solicitud_asociada)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            """, (s[0], s[1], ahora, ahora + timedelta(hours=1), s[2], id_solicitud))
+                UPDATE Solicitud
+                SET fk_estado = %s, respuesta = %s, gestionado_por = %s
+                WHERE id_solicitud = %s
+            """, (estado, respuesta, id_admin, id_solicitud))
 
-        connection.commit()
-        cursor.close()
-        connection.close()
-        return {'status': 'ok'}
+            if aceptada:
+                cursor.execute("""
+                    SELECT titulo, descripcion, inicio, fin, fk_ubicacion FROM Solicitud WHERE id_solicitud = %s
+                """, (id_solicitud,))
+                s = cursor.fetchone()
+                cursor.execute("""
+                    INSERT INTO Evento (titulo, descripcion, inicio, fin, fk_ubicacion, fk_solicitud_asociada)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """, (s[0], s[1], s[2], s[3], s[4], id_solicitud))
+
+            connection.commit()
+            cursor.close()
+            connection.close()
+            return {'status': 'ok'}
     
     def cargar_eventos(self):
         from controllers.evento import get_eventos
         from controllers.ubicacion import get_todas_ubicaciones
         eventos = get_eventos()
         ubicaciones = get_todas_ubicaciones()
-        recursos = {
-            'logo': cargar_recursos('img', 'escudoUnal.svg'),
-            'logo_background': cargar_recursos('img', 'sealBck.png'),
-            'logo_buho': cargar_recursos('img', 'logo_buho.svg')
-        }
-        compilar('eventos', {'eventos': eventos, 'ubicaciones': ubicaciones, **recursos, **info_usuario})
+        compilar('eventos', {'eventos': eventos, 'ubicaciones': ubicaciones, **recursos_comun, **info_usuario})
     
     def crear_evento(self, titulo, descripcion, inicio, fin, id_ubicacion):
         from config.conexion import get_connection
@@ -181,15 +154,16 @@ class API:
 info_usuario = {
     'nombre': 'Usuario 1',
     'email': 'usuario1@unal.edu.co',
-    'rol': 'usuario'
+    'rol': 'admin',  # puede ser 'usuario', 'admin' o 'invitado'
 }
 
-recursos = {
+recursos_comun = {
     'logo': cargar_recursos('img', 'escudoUnal.svg'),
     'logo_background': cargar_recursos('img', 'sealBck.png'),
     'logo_buho': cargar_recursos('img', 'logo_buho.svg')
 }
-compilar('home', {'ubicaciones': ubicaciones, **recursos, **info_usuario})
+
+compilar('home', {'ubicaciones': ubicaciones, **recursos_comun, **info_usuario})
 
 window = webview.create_window('UN-Mapa', (BASE_DIR / "web/_compilado.html").as_uri(), js_api=API())
 webview.start()
