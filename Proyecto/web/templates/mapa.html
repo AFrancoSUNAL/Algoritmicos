@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="text-xl font-bold mb-2">Mapa Interactivo</h1>
-
-<!-- Aquí se inyecta el HTML del mapa generado por Folium -->
-<div id="mapa" class="w-full h-[600px] rounded overflow-hidden">
-    {{ mapa_html | safe }}
+<div class="p-2">
+    <h1 class="text-xl font-bold mb-2 text-center">Mapa Interactivo</h1>
+    
+    <!-- Aquí se inyecta el HTML del mapa generado por Folium -->
+    <iframe src="{{ ruta_mapa }}" frameborder="0" class="w-full h-[75vh] rounded overflow-hidden"></iframe>
 </div>
 
 {% endblock %}

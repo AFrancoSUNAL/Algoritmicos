@@ -39,7 +39,7 @@ def generar_mapa():
         ).add_to(mapa)
 
     # 3. Guardar el mapa en la carpeta web/
-    ruta_output = pathlib.Path(__file__).parent.parent / "web" / "map.html"
+    ruta_output = pathlib.Path(__file__).parent.parent / "web" / "templates" / "map.html"
     mapa.save(str(ruta_output))
 
     return ruta_output

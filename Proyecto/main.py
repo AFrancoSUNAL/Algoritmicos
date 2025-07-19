@@ -153,10 +153,8 @@ class API:
 
     def cargar_mapa(self):
         from services.map_service import generar_mapa
-        ruta_html = generar_mapa()
-        with open(ruta_html, encoding='utf-8') as f:
-            html_map = f.read()
-        compilar('mapa', {'mapa_html': html_map, **recursos_comun, **info_usuario})
+        ruta_mapa = generar_mapa()
+        compilar('mapa', {'ruta_mapa': ruta_mapa, **recursos_comun, **info_usuario})
         
 # Forma temporal de cargar la información del usuario
 info_usuario = {

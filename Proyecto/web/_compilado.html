@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <header class="position relative flex justify-end align-items-center w-full p-4 bg-[#474545] text-white">
+        <div id="logo" class="position absolute top-0 left-2" style="background-image: url('file:///C:/Users/andre/Escritorio/Algoritmicos/Proyecto/web/static/img/sealBck.png'); background-size: cover; background-position: center;">
+            <img src="file:///C:/Users/andre/Escritorio/Algoritmicos/Proyecto/web/static/img/escudoUnal.svg" width="200">
+        </div>
+        
+        <div class="w-10 h-10 flex justify-between" style="width: calc(100% - 200px);">
+            <a href="#" onclick="window.pywebview.api.cargar_home()" class="flex items-center"><img src="file:///C:/Users/andre/Escritorio/Algoritmicos/Proyecto/web/static/img/logo_buho.svg" alt=""> Inicio</a>
+            <a href="#" onclick="window.pywebview.api.cargar_solicitudes()" class="flex items-center">Solicitudes</a>
+            <a href="#" onclick="window.pywebview.api.cargar_eventos()" class="flex items-center">Eventos</a>
+            <a href="#" onclick="window.pywebview.api.cargar_mapa()" class="flex items-center">Mapa</a>
+            <a href="#" onclick="window.pywebview.api.cargar_login()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Salir</a>
+        </div>
+        
+    </header>
+    <div id="content"> 
+<div class="p-2">
+    <h1 class="text-2xl font-bold text-center">Solicitudes de Evento</h1>
+    
+    <hr class="my-2">
+
+    
+        <!-- Sección: Lista de solicitudes pendientes -->
+        <h2 class="text-xl font-semibold mb-4">Pendientes por revisar</h2>
+        
+        
+            <p class="text-gray-600">No hay solicitudes pendientes.</p>
+        
+    
+    
+    
+    
+    <script>
+    function responderSolicitud(id, aceptada) {
+        const textarea = document.getElementById("respuesta_" + id);
+        const respuesta = textarea.value.trim();
+    
+        if (!respuesta) {
+            alert("Debes escribir una respuesta antes de enviar.");
+            return;
+        }
+    
+        const idAdmin = 1; // Temporalmente fijo
+        window.pywebview.api.responder_solicitud(id, aceptada, respuesta, idAdmin).then(response => {
+            if (response.status === "ok") {
+                alert("Solicitud procesada correctamente.");
+                window.pywebview.api.cargar_solicitudes();
+            } else {
+                alert("Error al procesar la solicitud.");
+            }
+        });
+    }
+    
+    function enviarSolicitud(e) {
+        e.preventDefault();
+    
+        const titulo = document.getElementById("titulo").value.trim();
+        const descripcion = document.getElementById("descripcion").value.trim();
+        const facultad = document.getElementById("facultad").value.trim();
+        const inicio = document.getElementById("inicio").value.trim();
+        const fin = document.getElementById("fin").value.trim();
+        const ubicacion = parseInt(document.getElementById("ubicacion").value);
+    
+        if (!titulo || !descripcion || !inicio || !fin || isNaN(ubicacion)) {
+            alert("Todos los campos son obligatorios.");
+            return;
+        }
+    
+        const idUsuario = 1;  // Temporalmente fijo
+    
+        window.pywebview.api.crear_solicitud(titulo, descripcion, facultad, inicio, fin, ubicacion, idUsuario).then(response => {
+            if (response.status === "ok") {
+                alert("Solicitud enviada correctamente.");
+                window.pywebview.api.cargar_solicitudes();  // Recargar la vista
+            } else {
+                alert("Error al enviar la solicitud.");
+            }
+        });
+    }
+    </script>
+</div>
+
+ </div>
+</body>
+</html>
