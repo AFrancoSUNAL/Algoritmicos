@@ -17,7 +17,7 @@
                     <p><strong>Facultad:</strong> {{ s.facultad }}</p>
                     <p><strong>Ubicación:</strong> {{ s.ubicacion }}</p>
                     <p><strong>Fecha de inicio:</strong> {{ s.inicio }}</p>
-                    <p><strong>Fecha de final:</strong> {{s.fin }}</p>
+                    <p><strong>Fecha de final:</strong> {{ s.fin }}</p>
                     <p><strong>Solicitante:</strong> {{ s.solicitante }}</p>
                     <p><strong>Fecha de creación:</strong> {{ s.creado_en }}</p>
         
@@ -73,11 +73,12 @@
             return;
         }
     
-        const idAdmin = 1; // Temporalmente fijo
+        const idAdmin = "{{ id }}"; // Temporalmente fijo
         window.pywebview.api.responder_solicitud(id, aceptada, respuesta, idAdmin).then(response => {
             if (response.status === "ok") {
                 alert("Solicitud procesada correctamente.");
-                window.pywebview.api.cargar_solicitudes();
+                const header_home = document.getElementById("header_home");
+                header_home.click();
             } else {
                 alert("Error al procesar la solicitud.");
             }
@@ -99,12 +100,13 @@
             return;
         }
     
-        const idUsuario = 1;  // Temporalmente fijo
+        const idUsuario = "{{ id }}";  // Temporalmente fijo
     
         window.pywebview.api.crear_solicitud(titulo, descripcion, facultad, inicio, fin, ubicacion, idUsuario).then(response => {
             if (response.status === "ok") {
                 alert("Solicitud enviada correctamente.");
-                window.pywebview.api.cargar_solicitudes();  // Recargar la vista
+                const header_home = document.getElementById("header_home");
+                header_home.click();
             } else {
                 alert("Error al enviar la solicitud.");
             }
