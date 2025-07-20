@@ -99,6 +99,7 @@ INSERT INTO EstadoSolicitud (titulo, descripcion) VALUES
 ('Aceptada', 'La solicitud ha sido aprobada y el evento fue creado'),
 ('Rechazada', 'La solicitud fue denegada por el administrador');
 
+-- Contraseña encriptada para 'usuario_prueba' y 'admin', para los dos es 12345
 INSERT INTO Usuario (nombre, contrasena, correo, rol)VALUES 
-('usuario_prueba', '12345', 'usuario@unal.edu.co', 'usuario');
-('admin', '12345', 'admin@unal.edu.co', 'admin')
+('usuario_prueba', '$2b$12$ozy4qHcENEb1vj5tU29sOuLMkkPEUCGLDhnrEgz/mRcZVrD6IGSPe', 'usuario@unal.edu.co', 'usuario'),
+('admin', '$2b$12$ozy4qHcENEb1vj5tU29sOuLMkkPEUCGLDhnrEgz/mRcZVrD6IGSPe', 'admin@unal.edu.co', 'admin');

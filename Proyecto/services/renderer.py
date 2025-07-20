@@ -45,5 +45,5 @@ info_usuario = {
     'id': '',
     'nombre': '',
     'email': '',
-    'rol': 'admin'  # puede ser 'usuario', 'admin' o 'invitado'
+    'rol': 'invitado'  # puede ser 'usuario', 'admin' o 'invitado'
 }
