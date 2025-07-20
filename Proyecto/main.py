@@ -7,6 +7,7 @@ import time
 
 BASE_DIR = Path(__file__).resolve().parent
 ubicaciones = get_todas_ubicaciones()
+global info_usuario 
 
 def esperar_archivo_ruta(ruta, max_segundos=5):
     """Espera hasta que el archivo exista y tenga contenido (>0 bytes)."""
@@ -134,6 +135,9 @@ class API:
         cursor.close()
         connection.close()
         return {'status': 'ok'}
+    
+    def cargar_registro(self):
+        compilar('registro', {**recursos_comun, **info_usuario})
 
     def abrir_ruta(self, id_origen, id_destino):
         from controllers.ubicacion import get_ubicacion
@@ -156,11 +160,27 @@ class API:
         ruta_mapa = generar_mapa()
         compilar('mapa', {'ruta_mapa': ruta_mapa, **recursos_comun, **info_usuario})
         
+    def login_usuario(self, correo, password):
+        from controllers.login import login
+        resultado = login(correo, password)
+        if resultado['status'] == 'ok':
+            info_usuario.update(resultado['usuario'])
+        return resultado
+
+    def registrar_usuario(self, correo, password):
+        from controllers.login import registrar_usuario
+        return registrar_usuario(correo, password)
+    
+    def cerrar_sesion(self):
+        info_usuario.update({ 'id': '', 'nombre': '', 'email': '', 'rol': 'invitado' })
+        self.cargar_home()
+        
 # Forma temporal de cargar la información del usuario
 info_usuario = {
-    'nombre': 'Usuario 1',
-    'email': 'usuario1@unal.edu.co',
-    'rol': 'admin',  # puede ser 'usuario', 'admin' o 'invitado'
+    'id': '',
+    'nombre': '',
+    'email': '',
+    'rol': 'invitado',  # puede ser 'usuario', 'admin' o 'invitado'
 }
 
 recursos_comun = {

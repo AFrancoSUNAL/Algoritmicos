@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="p-2">
+    <div class="p-2 flex justify-center">
+        <div class="w-64 flex flex-col border border-[#94B43B] rounded p-4 mt-4">
+            <h1 class="text-2xl font-bold text-center mb-4">Registro</h1>
+            <label for="correo">Correo:</label>
+            <input type="text" id="correo" name="correo" class="w-full border border-[#94B43B] rounded p-1 mb-2" required>
+            <label for="contrasena">Password:</label>
+            <input type="password" id="contrasena" name="contrasena" class="w-full border border-[#94B43B] rounded p-1 mb-4" required>
+            <button type="submit" onclick="registrar()" class="bg-[#94B43B] text-black px-4 py-1 rounded text-center mb-2">Registrarse</button>
+            <a href="#" onclick="window.pywebview.api.cargar_home()" class="bg-slate-500 text-slate-50 px-4 py-1 rounded text-center">Volver</a>
+        </div>
+    </div>
+    
+    <script>
+        function registrar(){
+            const correo = document.getElementById("correo").value;
+            const contrasena = document.getElementById("contrasena").value;
+    
+            if (!correo || !contrasena){
+                alert("Todos los campos deben estár llenos");
+                return;
+            }
+
+            window.pywebview.api.registrar_usuario(correo, contrasena).then(response => {
+                if (response.status !== "ok") {
+                    alert("Error al abrir la ruta: " + response.msg);
+                    return;
+                }
+                alert("Usuario creado con éxito")
+                window.pywebview.api.login_usuario(correo, contrasena).then(response => {
+                    if (response.status !== "ok") {
+                        alert("Error al abrir la ruta: " + response.msg);
+                        return;
+                    }   
+                    const header_home = document.getElementById("header_home");
+                    header_home.click();
+                });
+            });
+        }
+    </script>
+</div>
+
+{% endblock %}

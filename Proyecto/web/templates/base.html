@@ -12,25 +12,25 @@
         </div>
         {% if rol == 'usuario' %}
         <div class="w-10 h-10 flex justify-between" style="width: calc(100% - 200px);">
-            <a href="#" onclick="window.pywebview.api.cargar_home()" class="flex items-center"><img src="{{ logo_buho }}" alt=""> Inicio</a>
-            <a href="#" onclick="window.pywebview.api.cargar_solicitudes()" class="flex items-center">Solicitudes</a>
-            <a href="#" onclick="window.pywebview.api.cargar_eventos()" class="flex items-center">Eventos</a>
-            <a href="#" onclick="window.pywebview.api.cargar_mapa()" class="flex items-center">Mapa</a>
-            <a href="#" onclick="window.pywebview.api.cargar_login()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Salir</a>
+            <a href="#" id="header_home" onclick="window.pywebview.api.cargar_home()" class="flex items-center"><img src="{{ logo_buho }}" alt=""> Inicio</a>
+            <a href="#" id="header_solicitudes" onclick="window.pywebview.api.cargar_solicitudes()" class="flex ml-8 items-center">Solicitudes</a>
+            <a href="#" id="header_eventos" onclick="window.pywebview.api.cargar_eventos()" class="flex items-center">Eventos</a>
+            <a href="#" id="header_mapa" onclick="window.pywebview.api.cargar_mapa()" class="flex items-center">Mapa</a>
+            <a href="#" id="header_salir" onclick="window.pywebview.api.cerrar_sesion()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Salir</a>
         </div>
         {% elif rol == 'admin' %}
         <div class="w-10 h-10 flex justify-between" style="width: calc(100% - 200px);">
-            <a href="#" onclick="window.pywebview.api.cargar_home()" class="flex items-center"><img src="{{ logo_buho }}" alt=""> Inicio</a>
-            <a href="#" onclick="window.pywebview.api.cargar_solicitudes()" class="flex items-center">Solicitudes</a>
-            <a href="#" onclick="window.pywebview.api.cargar_eventos()" class="flex items-center">Eventos</a>
-            <a href="#" onclick="window.pywebview.api.cargar_mapa()" class="flex items-center">Mapa</a>
-            <a href="#" onclick="window.pywebview.api.cargar_login()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Salir</a>
+            <a href="#" id="header_home" onclick="window.pywebview.api.cargar_home()" class="flex items-center"><img src="{{ logo_buho }}" alt=""> Inicio</a>
+            <a href="#" id="header_solicitudes" onclick="window.pywebview.api.cargar_solicitudes()" class="flex ml-8 items-center">Solicitudes</a>
+            <a href="#" id="header_eventos" onclick="window.pywebview.api.cargar_eventos()" class="flex items-center">Eventos</a>
+            <a href="#" id="header_mapa" onclick="window.pywebview.api.cargar_mapa()" class="flex items-center">Mapa</a>
+            <a href="#" id="header_salir" onclick="window.pywebview.api.cerrar_sesion()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Salir</a>
         </div>
         {% elif rol == 'invitado' %}
         <div class="w-10 h-10 flex justify-between" style="width: calc(100% - 200px);">
-            <a href="#" onclick="window.pywebview.api.cargar_home()" class="flex items-center"><img src="{{ logo_buho }}" alt=""> Inicio</a>
-            <a href="#" onclick="window.pywebview.api.cargar_mapa()" class="flex items-center">Mapa</a>
-            <a href="#" onclick="window.pywebview.api.cargar_login()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Login</a>
+            <a href="#" id="header_home" onclick="window.pywebview.api.cargar_home()" class="flex items-center"><img src="{{ logo_buho }}" alt=""> Inicio</a>
+            <a href="#" id="header_mapa" onclick="window.pywebview.api.cargar_mapa()" class="flex items-center">Mapa</a>
+            <a href="#" id="header_salir" onclick="window.pywebview.api.cargar_login()" class="flex items-center bg-[#94B43B] text-black w-24 justify-center">Login</a>
         </div>
         {% endif %}
     </header>

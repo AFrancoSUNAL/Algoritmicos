@@ -101,3 +101,4 @@ INSERT INTO EstadoSolicitud (titulo, descripcion) VALUES
 
 INSERT INTO Usuario (nombre, contrasena, correo, rol)VALUES 
 ('usuario_prueba', '12345', 'usuario@unal.edu.co', 'usuario');
+('admin', '12345', 'admin@unal.edu.co', 'admin')

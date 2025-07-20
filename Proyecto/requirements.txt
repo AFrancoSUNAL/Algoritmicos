@@ -2,3 +2,4 @@ pywebview
 mysql-connector-python
 Jinja2
 folium
+bcrypt
