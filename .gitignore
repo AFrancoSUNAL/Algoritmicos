@@ -1,2 +1,16 @@
 *.tmp
 *.log
+
+# Python cache
+**/__pycache__/
+**/*.pyc
+
+# Archivos generados
+Proyecto/web/_compilado.html
+Proyecto/web/map.html
+
+# Config local
+Proyecto/config/db_info.json
+
+# Flake
+.flake8
