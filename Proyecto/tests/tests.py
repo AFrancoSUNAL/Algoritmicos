@@ -141,5 +141,42 @@ class TestRegistro(unittest.TestCase):
         self.assertEqual(resultado['status'], 'error')
         self.assertIn('ya está registrado', resultado['msg'].lower())
 
+class TestUbicacion(unittest.TestCase):
+    from controllers.ubicacion import get_todas_ubicaciones
+    from controllers.ubicacion import get_ubicacion
+    
+    def test_get_ubicacion_existente(self):
+        """
+        Verifica que se obtenga una ubicación válida por ID (suponiendo que el ID 1 existe)
+        """
+        resultado = get_ubicacion(1)
+        
+        self.assertIsNotNone(resultado)
+        self.assertIsInstance(resultado, tuple)
+        self.assertGreater(len(resultado), 0)
+
+    def test_get_ubicacion_inexistente(self):
+        """
+        Verifica que no se obtenga nada para un ID inexistente (ej. -1)
+        """
+        resultado = get_ubicacion(-1)
+        
+        self.assertIsNone(resultado)
+
+    def test_get_todas_ubicaciones(self):
+        """
+        Verifica que la función devuelva una lista de ubicaciones ordenadas por nombre
+        """
+        resultado = get_todas_ubicaciones()
+        
+        self.assertIsInstance(resultado, list)
+        
+        # Solo si hay ubicaciones, verifica formato y orden
+        if resultado:
+            self.assertTrue(all(isinstance(fila, tuple) and len(fila) == 2 for fila in resultado))
+            nombres = [fila[1] for fila in resultado]
+            self.assertEqual(nombres, sorted(nombres))
+
+
 if __name__ == '__main__':
     unittest.main()
