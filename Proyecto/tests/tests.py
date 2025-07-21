@@ -9,6 +9,8 @@ from controllers import login
 from services.api import API
 from config.conexion import get_connection 
 from controllers.solicitud import get_solicitudes_pendientes
+from controllers.ubicacion import get_todas_ubicaciones
+from controllers.ubicacion import get_ubicacion
 
 class TestLogin(unittest.TestCase):
     def test_registro_correo_no_institucional(self):
@@ -142,9 +144,7 @@ class TestRegistro(unittest.TestCase):
         self.assertIn('ya está registrado', resultado['msg'].lower())
 
 class TestUbicacion(unittest.TestCase):
-    from controllers.ubicacion import get_todas_ubicaciones
-    from controllers.ubicacion import get_ubicacion
-    
+   
     def test_get_ubicacion_existente(self):
         """
         Verifica que se obtenga una ubicación válida por ID (suponiendo que el ID 1 existe)
@@ -172,10 +172,10 @@ class TestUbicacion(unittest.TestCase):
         self.assertIsInstance(resultado, list)
         
         # Solo si hay ubicaciones, verifica formato y orden
-        if resultado:
+        if resultado: # Solo si hay ubicaciones, verifica formato y orden alfabético (ignorando mayúsculas)
             self.assertTrue(all(isinstance(fila, tuple) and len(fila) == 2 for fila in resultado))
             nombres = [fila[1] for fila in resultado]
-            self.assertEqual(nombres, sorted(nombres))
+            self.assertEqual(nombres, sorted(nombres, key=lambda x: x.lower()))
 
 
 if __name__ == '__main__':
