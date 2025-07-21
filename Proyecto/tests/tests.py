@@ -171,12 +171,10 @@ class TestUbicacion(unittest.TestCase):
         
         self.assertIsInstance(resultado, list)
         
-        # Solo si hay ubicaciones, verifica formato y orden
-        if resultado:
+        if resultado:  # Solo si hay ubicaciones, verifica formato y orden alfabético (ignorando mayúsculas)
             self.assertTrue(all(isinstance(fila, tuple) and len(fila) == 2 for fila in resultado))
             nombres = [fila[1] for fila in resultado]
-            self.assertEqual(nombres, sorted(nombres))
-
+            self.assertEqual(nombres, sorted(nombres, key=lambda x: x.lower()))
 
 if __name__ == '__main__':
     unittest.main()
