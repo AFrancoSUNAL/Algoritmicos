@@ -25,6 +25,13 @@ class API:
     def crear_solicitud(self, titulo, descripcion, facultad, inicio, fin, id_ubicacion, id_usuario):
         connection = get_connection()
         cursor = connection.cursor()
+        
+        cursor.execute("SELECT COUNT(*) FROM solicitud WHERE fk_estado=1 AND creado_por = %s", (id_usuario,))
+        if cursor.fetchone()[0] > 0:
+            cursor.close()
+            connection.close()
+            return {'status': 'forbidden', 'msg': 'Ya tienes una solicitud pendiente.'}
+        
         cursor.execute("""
             INSERT INTO Solicitud (titulo, descripcion, facultad, inicio, fin, fk_ubicacion, creado_por)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
@@ -40,6 +47,9 @@ class API:
         compilar('solicitudes', {'solicitudes': solicitudes, 'ubicaciones': ubicaciones, **recursos_comun, **info_usuario})
 
     def responder_solicitud(self, id_solicitud, aceptada, respuesta, id_admin):
+        if respuesta is None or respuesta.strip() == "":
+            return {'status': 'error', 'msg': 'La respuesta no puede estar vacía.'}
+        
         connection = get_connection()
         cursor = connection.cursor()
         estado = 2 if aceptada else 3

@@ -1,7 +1,7 @@
 {
     "host": "localhost",
     "user": "root",
-    "port": "3306",
+    "port": "5000",
     "password": "12345",
     "database": "un_mapa_db"
 }

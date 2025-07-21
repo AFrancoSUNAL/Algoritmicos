@@ -105,8 +105,10 @@
         window.pywebview.api.crear_solicitud(titulo, descripcion, facultad, inicio, fin, ubicacion, idUsuario).then(response => {
             if (response.status === "ok") {
                 alert("Solicitud enviada correctamente.");
-                const header_home = document.getElementById("header_home");
-                header_home.click();
+                const header_solicitudes = document.getElementById("header_solicitudes");
+                header_solicitudes.click();
+            } else if (response.status === "forbidden") {
+                alert(response.msg);
             } else {
                 alert("Error al enviar la solicitud.");
             }

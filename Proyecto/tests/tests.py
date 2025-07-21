@@ -1,13 +1,16 @@
 import unittest
 import sys
+import datetime
 from pathlib import Path
 
 # Añadir la ruta raíz del proyecto para poder importar correctamente
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from controllers import login
+from services.api import API
+from config.conexion import get_connection 
+from controllers.solicitud import get_solicitudes_pendientes
 
 class TestLogin(unittest.TestCase):
-
     def test_registro_correo_no_institucional(self):
         """
         Verifica que no se permita registrar un usuario con correo que no sea @unal.edu.co
@@ -34,6 +37,76 @@ class TestLogin(unittest.TestCase):
         resultado = login.login("testuser@unal.edu.co", "incorrecta")
         self.assertEqual(resultado['status'], 'error')
         self.assertIn('Contraseña', resultado['msg'])
+
+class TestSolicitudes(unittest.TestCase):
+    
+    def test_crear_eventos_repetidos(self):
+        """
+        Verifica que no se acepten o rechazen solicitudes de eventos varias veces.
+        """
+        
+        api = API()
+
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM Evento")
+        total_antes = cursor.fetchone()
+
+        api.crear_solicitud("solicitud_test", "Lorem ipsum dolor sit amet", "", datetime.datetime.now() + datetime.timedelta(days=1), datetime.datetime.now() + datetime.timedelta(days=2), 1, 2)
+        
+        ultima_solicitud = get_solicitudes_pendientes()[-1]
+        api.responder_solicitud(ultima_solicitud['id_solicitud'], 'Aceptada', 'Solicitud aceptada correctamente', 1)
+        api.responder_solicitud(ultima_solicitud['id_solicitud'], 'Aceptada', 'Solicitud aceptada correctamente', 1)
+        api.responder_solicitud(ultima_solicitud['id_solicitud'], 'Aceptada', 'Solicitud aceptada correctamente', 1)
+
+        cursor.close()
+        conn.close()
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT COUNT(*) FROM Evento")
+        
+        total_despues = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        self.assertEqual(int(total_antes[0]) + 1, int(total_despues[0]))
+        
+    def test_crear_solicitud_repetida(self):
+        """
+        Verifica que no se pueda crear una solicitud si ya hay una pendiente.
+        """
+        
+        api = API()
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        api.crear_solicitud("solicitud_repetida_test_1", "Lorem ipsum dolor sit amet", "", datetime.datetime.now() + datetime.timedelta(days=1), datetime.datetime.now() + datetime.timedelta(days=2), 1, 1)
+        
+        # Intentar crear otra solicitud
+        resultado = api.crear_solicitud("solicitud_repetida_test_2", "Lorem ipsum dolor sit amet", "", datetime.datetime.now() + datetime.timedelta(days=3), datetime.datetime.now() + datetime.timedelta(days=4), 1, 1)
+
+        cursor.close()
+        conn.close()
+        
+        self.assertEqual(resultado['status'], 'forbidden')
+        
+    def test_solicitud_sin_respuesta(self):
+        """
+        Verifica que no se pueda aceptar o rechazar una solicitud sin respuesta.
+        """
+        
+        api = API()
+        
+        api.crear_solicitud("solicitud_sin_respuesta", "Lorem ipsum dolor sit amet", "", datetime.datetime.now() + datetime.timedelta(days=1), datetime.datetime.now() + datetime.timedelta(days=2), 1, 2)
+        ultima_solicitud = get_solicitudes_pendientes()[-1]
+        test1 = api.responder_solicitud(ultima_solicitud['id_solicitud'], 2, "", 2)
+        test2 = api.responder_solicitud(ultima_solicitud['id_solicitud'], 1, None, 2)
+        
+        self.assertEqual(test1['status'], 'error')
+        self.assertEqual(test2['status'], 'error')
+        
 
 if __name__ == '__main__':
     unittest.main()
