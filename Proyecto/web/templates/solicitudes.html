@@ -77,8 +77,8 @@
         window.pywebview.api.responder_solicitud(id, aceptada, respuesta, idAdmin).then(response => {
             if (response.status === "ok") {
                 alert("Solicitud procesada correctamente.");
-                const header_home = document.getElementById("header_home");
-                header_home.click();
+                const header_solicitudes = document.getElementById("header_solicitudes");
+                header_solicitudes.click();
             } else {
                 alert("Error al procesar la solicitud.");
             }

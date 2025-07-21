@@ -29,7 +29,7 @@ class TestLogin(unittest.TestCase):
         # El test puede devolver 'ok' o 'error' si el usuario ya está registrado, ambas respuestas son válidas.
         self.assertIn(resultado['status'], ['ok', 'error'])
 
-    def test_login_contraseña_incorrecta(self):
+    def test_login_contrasena_incorrecta(self):
         """
         Verifica que no se permita el inicio de sesión con una contraseña incorrecta.
         Asegúrate de que este correo exista con una contraseña distinta a 'incorrecta'.
@@ -108,26 +108,26 @@ class TestSolicitudes(unittest.TestCase):
         self.assertEqual(test2['status'], 'error')
         
 class TestRegistro(unittest.TestCase):
-    def test_registro_contraseña_debil(self):
+    def test_registro_contrasena_debil(self):
         """
         Verifica que no se permita registrar un usuario con contraseña débil.
         """
         correo = "debil@unal.edu.co"
-        contraseña_debil = "123456"  # No cumple con RF19
-        resultado = login.registrar_usuario(correo, contraseña_debil)
+        contrasena_debil = "123456"  # No cumple con RF19
+        resultado = login.registrar_usuario(correo, contrasena_debil)
         self.assertEqual(resultado['status'], 'error')
         self.assertIn('contraseña', resultado['msg'].lower())
 
     def test_login_exitoso(self):
         correo = "testuser_1@unal.edu.co"
-        contraseña = "C0ntraseña!2"  # Cumple requisitos
+        contrasena = "C0ntraseña!2"  # Cumple requisitos
 
         # Intentar registrar al usuario
-        resultado_registro = login.registrar_usuario(correo, contraseña)
+        resultado_registro = login.registrar_usuario(correo, contrasena)
         self.assertIn(resultado_registro['status'], ['ok', 'error'])
 
         # Luego login con la misma contraseña en texto plano
-        resultado_login = login.login(correo, contraseña)
+        resultado_login = login.login(correo, contrasena)
         self.assertEqual(resultado_login['status'], 'ok')
 
     def test_registro_correo_duplicado(self):
@@ -135,9 +135,9 @@ class TestRegistro(unittest.TestCase):
         Verifica que no se permita registrar dos veces el mismo correo institucional.
         """
         correo = "duplicado@unal.edu.co"
-        contraseña = "$2b$12$ozy4qHcENEb1vj5tU29sOuLMkkPEUCGLDhnrEgz/mRcZVrD6IGSPe"
-        login.registrar_usuario(correo, contraseña)  # Primera vez
-        resultado = login.registrar_usuario(correo, contraseña)  # Segunda vez
+        contrasena = "$2b$12$ozy4qHcENEb1vj5tU29sOuLMkkPEUCGLDhnrEgz/mRcZVrD6IGSPe"
+        login.registrar_usuario(correo, contrasena)  # Primera vez
+        resultado = login.registrar_usuario(correo, contrasena)  # Segunda vez
         self.assertEqual(resultado['status'], 'error')
         self.assertIn('ya está registrado', resultado['msg'].lower())
 
