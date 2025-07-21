@@ -35,5 +35,39 @@ class TestLogin(unittest.TestCase):
         self.assertEqual(resultado['status'], 'error')
         self.assertIn('Contraseña', resultado['msg'])
 
+    def test_registro_contraseña_debil(self):
+        """
+        Verifica que no se permita registrar un usuario con contraseña débil.
+        """
+        correo = "debil@unal.edu.co"
+        contraseña_debil = "123456"  # No cumple con RF19
+        resultado = login.registrar_usuario(correo, contraseña_debil)
+        self.assertEqual(resultado['status'], 'error')
+        self.assertIn('contraseña', resultado['msg'].lower())
+
+    def test_login_exitoso(self):
+        correo = "testuser_1@unal.edu.co"
+        contraseña = "C0ntraseña!2"  # Cumple requisitos
+
+        # Intentar registrar al usuario
+        resultado_registro = login.registrar_usuario(correo, contraseña)
+        self.assertIn(resultado_registro['status'], ['ok', 'error'])
+
+        # Luego login con la misma contraseña en texto plano
+        resultado_login = login.login(correo, contraseña)
+        self.assertEqual(resultado_login['status'], 'ok')
+
+    def test_registro_correo_duplicado(self):
+        """
+        Verifica que no se permita registrar dos veces el mismo correo institucional.
+        """
+        correo = "duplicado@unal.edu.co"
+        contraseña = "$2b$12$ozy4qHcENEb1vj5tU29sOuLMkkPEUCGLDhnrEgz/mRcZVrD6IGSPe"
+        login.registrar_usuario(correo, contraseña)  # Primera vez
+        resultado = login.registrar_usuario(correo, contraseña)  # Segunda vez
+        self.assertEqual(resultado['status'], 'error')
+        self.assertIn('ya está registrado', resultado['msg'].lower())
+
+
 if __name__ == '__main__':
     unittest.main()

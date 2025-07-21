@@ -5,6 +5,9 @@ def registrar_usuario(correo, password):
     if not re.match(r'^[\w\.-]+@unal\.edu\.co$', correo):
         return {'status': 'error', 'msg': 'El correo debe ser institucional (@unal.edu.co)'}
     
+    if not es_contraseña_segura(password):
+        return {"status": "error", "msg": "La contraseña no cumple con los requisitos de seguridad"}
+
     hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
     
     from config.conexion import get_connection
@@ -52,3 +55,12 @@ def login(correo, password):
         }
     else:
         return {'status': 'error', 'msg': 'Contraseña incorrecta'}
+    
+def es_contraseña_segura(contraseña):
+    return (
+        len(contraseña) >= 8 and
+        re.search(r"[A-Z]", contraseña) and
+        re.search(r"[a-z]", contraseña) and
+        re.search(r"\d", contraseña) and
+        re.search(r"[^A-Za-z0-9]", contraseña)
+    )
